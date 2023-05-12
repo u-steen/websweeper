@@ -153,8 +153,15 @@ function cellClick(e){
             }
         }
     }      
+    if(isSolved()){
+        console.log("solved");
+    }
+    else{
+        console.log("not solved");
+    }
+
 }
-// Check if game has ended
+
 let table = document.getElementById("websweeper");
     
 
@@ -185,6 +192,21 @@ function revealEmptyCells(cell){
             }
         }
     }
+}
+
+function isSolved(){
+    for(let i = 0; i < size; i++){
+        for(let j = 0; j < size ; j++){
+            const cell = document.getElementsByClassName("r"+i+" c"+j);
+            if((cell[0].classList.contains('bomb') && (cell[0].classList.contains('flagged'))) 
+                || cell[0].classList.contains('revealed')){
+                console.log('casuta', i, j, 'casuta rezolvata');
+            }
+            else 
+                return false;
+        }
+    }
+    return true;
 }
 
 
