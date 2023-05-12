@@ -27,3 +27,22 @@ table{
 .revealed{
     background-color: azure;
 }
+
+.menu{
+    background-color: rgb(146, 110, 187);
+    width: 500px;
+    height: 400px;
+    position: absolute;
+    top: 120px;
+    left: 115px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.startButton{
+    width: 100px;
+    height: 75px;
+    border-radius: 10%;
+    background-color: #bfcbf3;
+}

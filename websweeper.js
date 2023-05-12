@@ -1,10 +1,23 @@
-const nBombs = 10;
+const nBombs = 20;
 const size = 10;
 
 // TODO: change amount of bombs from web
 
 function initTable(size){
     let table = document.getElementById("websweeper");
+    // // Init start menu
+    // let menu = document.createElement("div");
+    // menu.classList.add("menu");
+    // // Start button
+    // let startButton = document.createElement("button");
+    // startButton.innerText = 'Start!';
+    // startButton.classList.add("startButton");
+    // startButton.addEventListener('click', () => {
+    //     menu.style.
+    // })
+    // menu.append(startButton);
+
+    // table.appendChild(menu);
     // TODO: catch errors
     if(websweeper){
         const createdTable = document.createElement("table");
@@ -15,11 +28,12 @@ function initTable(size){
                 createdCell.classList += "r"+i+" c"+j;
                 // Generate bombs
                 if(Math.random()*100 > 100-nBombs){
+                    // TODO: check out textNodes
                     createdCell.innerText = '';
                     createdCell.style.color = 'white';
                     createdCell.classList += ' bomb';
                 }
-                createdCell.addEventListener('click', cellClick, true);
+                createdCell.addEventListener('mousedown', cellClick, true);
                 createdRow.appendChild(createdCell);
             }
             createdTable.appendChild(createdRow);
@@ -80,31 +94,40 @@ function insertNumber(cell, number){
 }
 
 function cellClick(e){
-    // console.log(e);
+    console.log(e.button);
     if(e.target.classList.contains('bomb')){
         // TODO: Stop game - lost
         console.log('BOMB!');
     }
     // Reveal number
     else{
-        // click on text
-        if(e.target.offsetParent.nodeName === 'TD'){ 
-            e.target.offsetParent.classList.add('revealed');
-            e.target.style.opacity = '1';
-        }
-        // click on cell
-        else{
-            e.target.classList.add('revealed');
-
-            // For empty cells
-            if(e.target.children[0].innerText === ''){
-                console.log('empty cell');
-                revealEmptyCells(e.target);
-
+        // left click
+        if(e.button === 0){
+            // click on text
+            if(e.target.offsetParent.nodeName === 'TD'){ 
+                e.target.offsetParent.classList.add('revealed');
+                e.target.style.opacity = '1';
             }
-            e.target.children[0].style.opacity = '1';
+            // click on cell
+            else{
+                e.target.classList.add('revealed');
+
+                // For empty cells
+                if(e.target.children[0].innerText === ''){
+                    console.log('empty cell');
+                    revealEmptyCells(e.target);
+
+                }
+                e.target.children[0].style.opacity = '1';
+            }
         }
-    }   
+        else if(e.button === 2){
+            // TODO: flagging
+        }      
+    }
+    // Check if game has ended
+    let table = document.getElementById("websweeper");
+    
 }
 
 function revealEmptyCells(cell){
