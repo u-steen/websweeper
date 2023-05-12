@@ -1,10 +1,17 @@
-const nBombs = 20;
+const nBombs = 10;
 const size = 10;
 
 // TODO: change amount of bombs from web
 
 function initTable(size){
     let table = document.getElementById("websweeper");
+
+    // Disables right click
+    document.addEventListener("contextmenu", (e) => {
+        if(e.target.id !== 'websweeper'){
+            e.preventDefault();
+        }
+    });
     // // Init start menu
     // let menu = document.createElement("div");
     // menu.classList.add("menu");
@@ -54,7 +61,6 @@ function fillNumbers(){
         for(let j = 0; j < size ; j++){
             // console.log("caut:", 'r'+i+" c"+j);
             const cell = document.getElementsByClassName("r"+i+" c"+j);
-            // console.log(cell);
             if(cell[0].classList.contains('bomb')){
                 continue;
             }
@@ -86,10 +92,11 @@ function insertNumber(cell, number){
     const numberInside = document.createElement('p');
     if(number){
         numberInside.innerText = number;
+        cell.classList.add('number');
     }
     numberInside.classList.add('formated');
     numberInside.style.color = colors[number-1];
-    numberInside.removeEventListener('click', cellClick);
+    // numberInside.removeEventListener('click', cellClick);
     cell.appendChild(numberInside);
 }
 
@@ -123,6 +130,7 @@ function cellClick(e){
         }
         else if(e.button === 2){
             // TODO: flagging
+            // e.target.style.backgroundColor = 'red';
         }      
     }
     // Check if game has ended
@@ -132,7 +140,8 @@ function cellClick(e){
 
 function revealEmptyCells(cell){
     cell.classList.add('revealed');
-    if(cell.innerText !== ''){
+    // cell.style.backgroundColor = 'azure';
+    if(cell.classList.contains('number')){
         cell.children[0].style.opacity = '1';
         return;
     }
