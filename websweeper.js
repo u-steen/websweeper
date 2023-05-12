@@ -102,41 +102,61 @@ function insertNumber(cell, number){
 
 function cellClick(e){
     console.log(e.button);
-    if(e.target.classList.contains('bomb')){
-        // TODO: Stop game - lost
-        console.log('BOMB!');
-    }
+    
     // Reveal number
-    else{
-        // left click
-        if(e.button === 0){
-            // click on text
-            if(e.target.offsetParent.nodeName === 'TD'){ 
-                e.target.offsetParent.classList.add('revealed');
-                e.target.style.opacity = '1';
+    // left click
+    if(e.button === 0){
+        if(e.target.classList.contains('bomb')){
+            // TODO: Stop game - lost
+            console.log('BOMB!');
+            return;
+        }
+        // click on text
+        if(e.target.offsetParent.nodeName === 'TD'){ 
+            e.target.offsetParent.classList.add('revealed');
+            e.target.style.opacity = '1';
+        }
+        // click on cell
+        else{
+            e.target.classList.add('revealed');
+
+            // For empty cells
+            if(e.target.children[0].innerText === ''){
+                console.log('empty cell');
+                revealEmptyCells(e.target);
+
             }
-            // click on cell
+            e.target.children[0].style.opacity = '1';
+        }
+    }
+    else if(e.button === 2){
+        // click on text
+        if(e.target.offsetParent.nodeName === 'TD'){
+            if(e.target.offsetParent.classList.contains('revealed')){
+                return;
+            }
+            // enable/disable flagging
+            if(e.target.offsetParent.classList.contains('flagged')){
+                e.target.offsetParent.classList.remove('flagged');
+            }
             else{
-                e.target.classList.add('revealed');
-
-                // For empty cells
-                if(e.target.children[0].innerText === ''){
-                    console.log('empty cell');
-                    revealEmptyCells(e.target);
-
-                }
-                e.target.children[0].style.opacity = '1';
+                e.target.offsetParent.classList.add('flagged');
             }
         }
-        else if(e.button === 2){
-            // TODO: flagging
-            // e.target.style.backgroundColor = 'red';
-        }      
-    }
-    // Check if game has ended
-    let table = document.getElementById("websweeper");
-    
+        // click on cell
+        else{
+            if(e.target.classList.contains('flagged')){
+                e.target.classList.remove('flagged');
+            }
+            else{
+                e.target.classList.add('flagged');
+            }
+        }
+    }      
 }
+// Check if game has ended
+let table = document.getElementById("websweeper");
+    
 
 function revealEmptyCells(cell){
     cell.classList.add('revealed');

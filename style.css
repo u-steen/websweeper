@@ -24,6 +24,11 @@ table{
     opacity: 0;
 }
 
+.flagged{
+    background-color: red;
+    /* background-image: url('flag.jpg'); */
+}
+
 .revealed{
     background-color: azure;
 }
