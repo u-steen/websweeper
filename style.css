@@ -1,4 +1,4 @@
-td{
+#websweeper > table td{
     background-color: #342e44;
     width: 70px;
     height: 70px;
@@ -10,9 +10,10 @@ td{
     text-align: center;
 }
 
-table{
+#websweeper > table{
     border-spacing: 0px 0;
     border: 7px solid black;
+    position: relative;
 }
 
 .formated{
@@ -21,20 +22,21 @@ table{
     padding: 0px;
     font-weight: 800;
     font-family: monospace;
+    text-shadow: 1px 2px 1px #0d0324;
     opacity: 0;
 }
 
 .flagged{
-    background-color: red;
+    background-color: red !important; 
     /* background-image: url('flag.jpg'); */
 }
 
 .revealed{
-    background-color: azure;
+    background-color: rgb(189, 187, 196) !important;
 }
 
 .menu{
-    background-color: rgb(146, 110, 187);
+    background-color: rgb(165, 154, 180);
     width: 500px;
     height: 400px;
     position: absolute;
@@ -44,7 +46,28 @@ table{
     align-items: center;
     justify-content: center;
 }
+.overlayBox{
+    height: 714px;
+    width: 714px;
+    background-color: rgba(57, 52, 61, 0.384);
+    position: absolute;
+    z-index: 1;
 
+    display: none;
+}
+.lostBox{
+    height: 400px;
+    width: 500px;
+    background-color: rgb(233, 88, 69);
+    position: absolute;
+    top: 150px;
+    left: 115px;
+    text-align: center;
+}
+.lostBox_h1{
+    font-size: 3rem;
+    color: white;
+}
 .startButton{
     width: 100px;
     height: 75px;

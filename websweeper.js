@@ -5,8 +5,9 @@ const size = 10;
 
 function initTable(size){
     let table = document.getElementById("websweeper");
+    lostBoxInit();
 
-    // Disables right click
+    // Disables right click TODO: de ce merge?
     document.addEventListener("contextmenu", (e) => {
         if(e.target.id !== 'websweeper'){
             e.preventDefault();
@@ -49,6 +50,24 @@ function initTable(size){
         fillNumbers();
     }
 
+}
+
+function lostBoxInit(){
+    const table = document.getElementById("websweeper");
+    const overlayBox = document.createElement('div');
+    overlayBox.classList.add('overlayBox');
+
+    const lostBox = document.createElement('div');
+    lostBox.classList.add('lostBox');
+
+    const lostBox_title = document.createElement('h1');
+    lostBox_title.classList.add('lostBox_h1');
+    lostBox_title.innerText = 'Congratulations!';
+    lostBox.appendChild(lostBox_title);
+
+    overlayBox.appendChild(lostBox);
+
+    table.appendChild(overlayBox); 
 }
 
 function fillNumbers(){
@@ -101,13 +120,13 @@ function insertNumber(cell, number){
 }
 
 function cellClick(e){
-    console.log(e.button);
+    // console.log(e.button);
     
     // Reveal number
     // left click
     if(e.button === 0){
         if(e.target.classList.contains('bomb')){
-            // TODO: Stop game - lost
+            document.getElementsByClassName('overlayBox')[0].style.display = 'block';
             console.log('BOMB!');
             return;
         }
@@ -186,8 +205,8 @@ function revealEmptyCells(cell){
             }
             let nearbyCell = document.getElementsByClassName("r"+i_fin+" c"+j_fin);
             if(!nearbyCell[0].classList.contains('revealed')){
-                console.log("empty nearby:", "r"+i_fin+" c"+j_fin);
-                //console.log(nearbyCell[0]);
+                // console.log("empty nearby:", "r"+i_fin+" c"+j_fin);
+                // console.log(nearbyCell[0]);
                 revealEmptyCells(nearbyCell[0]);
             }
         }
