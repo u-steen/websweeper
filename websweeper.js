@@ -1,4 +1,4 @@
-const nBombs = 2;
+const nBombs = 12;
 const size = 10;
 
 function initTable(size){
@@ -251,7 +251,6 @@ function lost(){
 
 function retry(){
     window.location.reload();
-    // TODO: reset table
 }
 
 function won(){
@@ -264,4 +263,8 @@ let table = document.getElementById("websweeper");
 
 window.onload = () => {
     initTable(size);
+    // TODO: TIME UPDATE
+    //      - Timer
+    //      - Best score
+    //      - Bug fixes (diffrent fonts on different computer, bomb nr)
 }
