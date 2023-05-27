@@ -46,16 +46,14 @@
     align-items: center;
     justify-content: center;
 }
-.overlayBox{
+#overlayBox{
     height: 714px;
     width: 714px;
-    background-color: rgba(57, 52, 61, 0.384);
+    background-color: rgba(57, 52, 61, 0.507);
     position: absolute;
     z-index: 1;
-
-    display: none;
 }
-.lostBox{
+#lostMenuBox{
     height: 400px;
     width: 500px;
     background-color: rgb(233, 88, 69);
@@ -64,13 +62,41 @@
     left: 115px;
     text-align: center;
 }
-.lostBox_h1{
-    font-size: 3rem;
+
+#wonMenuBox{
+    height: 400px;
+    width: 500px;
+    background-color: rgb(26, 175, 155);
+    position: absolute;
+    top: 150px;
+    left: 115px;
+    text-align: center;
+}
+
+#mainMenuBox{
+    height: 400px;
+    width: 500px;
+    background-color: rgb(122, 167, 96);
+    position: absolute;
+    top: 150px;
+    left: 115px;
+    text-align: center;
+}
+
+#websweeper button{
+    width: 100px;
+    height: 100px;
+    border-radius: 0;
+    background-color: rgb(165, 154, 180);
+    font-size: 2rem;
+}
+
+#startBtn:hover{
+    background-color: #0d0324;
     color: white;
 }
-.startButton{
-    width: 100px;
-    height: 75px;
-    border-radius: 10%;
-    background-color: #bfcbf3;
+
+#websweeper h2{
+    font-size: 3rem;
+    color: white;
 }
