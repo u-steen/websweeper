@@ -1,32 +1,66 @@
-const nBombs = 10;
+const nBombs = 2;
 const size = 10;
 
-// TODO: change amount of bombs from web
-
 function initTable(size){
-    let table = document.getElementById("websweeper");
-    lostBoxInit();
+    const table = document.getElementById("websweeper");
+    // TODO: overlay is not the right word
+    // Overlay - the transparent background behind boxes
+    const overlay = document.createElement("div");
+    overlay.setAttribute("id", 'overlayBox');
+    table.appendChild(overlay);
 
-    // Disables right click TODO: de ce merge?
+    // Main menu
+    const startMenuBox = document.createElement("div");
+    startMenuBox.setAttribute("id", "mainMenuBox");
+    overlay.appendChild(startMenuBox);
+
+    const titleMenuBox = document.createElement("h2");
+    titleMenuBox.innerText = "Welcome to Websweeper!";
+    startMenuBox.appendChild(titleMenuBox);
+
+    const startBtn = document.createElement("button");
+    startBtn.setAttribute("id", "startBtn");
+    startBtn.innerText = "Start now!";
+    startBtn.addEventListener('click', start);
+    startMenuBox.appendChild(startBtn);
+
+    // "You lost" menu
+    const lostMenuBox = document.createElement("div");
+    lostMenuBox.setAttribute("id", "lostMenuBox");
+    lostMenuBox.style.display = "none";
+    overlay.appendChild(lostMenuBox);
+
+    const titleLostBox = document.createElement("h2");
+    titleLostBox.innerText = "You Lost!";
+    lostMenuBox.appendChild(titleLostBox);
+
+    const lostRetryBtn = document.createElement("button");
+    lostRetryBtn.innerText = "Retry";
+    lostRetryBtn.addEventListener('click', retry);
+    lostMenuBox.appendChild(lostRetryBtn);
+
+    // "You won" menu
+    const wonMenuBox = document.createElement("div");
+    wonMenuBox.setAttribute("id", "wonMenuBox");
+    wonMenuBox.style.display = "none";
+    overlay.appendChild(wonMenuBox);
+
+    const titleWonBox = document.createElement("h2");
+    titleWonBox.innerText = "You Won! Thank you for playing!";
+    wonMenuBox.appendChild(titleWonBox);
+    
+    const wonRetryBtn = document.createElement("button");
+    wonRetryBtn.innerText = "Retry";
+    wonRetryBtn.addEventListener('click', retry);
+    wonMenuBox.appendChild(wonRetryBtn);
+
+
+    // De ce merge asa cv???
     document.addEventListener("contextmenu", (e) => {
         if(e.target.id !== 'websweeper'){
             e.preventDefault();
         }
     });
-    // // Init start menu
-    // let menu = document.createElement("div");
-    // menu.classList.add("menu");
-    // // Start button
-    // let startButton = document.createElement("button");
-    // startButton.innerText = 'Start!';
-    // startButton.classList.add("startButton");
-    // startButton.addEventListener('click', () => {
-    //     menu.style.
-    // })
-    // menu.append(startButton);
-
-    // table.appendChild(menu);
-    // TODO: catch errors
     if(websweeper){
         const createdTable = document.createElement("table");
         for(let i = 0; i < size; i++){
@@ -36,7 +70,6 @@ function initTable(size){
                 createdCell.classList += "r"+i+" c"+j;
                 // Generate bombs
                 if(Math.random()*100 > 100-nBombs){
-                    // TODO: check out textNodes
                     createdCell.innerText = '';
                     createdCell.style.color = 'white';
                     createdCell.classList += ' bomb';
@@ -52,23 +85,7 @@ function initTable(size){
 
 }
 
-function lostBoxInit(){
-    const table = document.getElementById("websweeper");
-    const overlayBox = document.createElement('div');
-    overlayBox.classList.add('overlayBox');
 
-    const lostBox = document.createElement('div');
-    lostBox.classList.add('lostBox');
-
-    const lostBox_title = document.createElement('h1');
-    lostBox_title.classList.add('lostBox_h1');
-    lostBox_title.innerText = 'Congratulations!';
-    lostBox.appendChild(lostBox_title);
-
-    overlayBox.appendChild(lostBox);
-
-    table.appendChild(overlayBox); 
-}
 
 function fillNumbers(){
     const table = document.getElementById("websweeper");
@@ -119,15 +136,12 @@ function insertNumber(cell, number){
     cell.appendChild(numberInside);
 }
 
-function cellClick(e){
-    // console.log(e.button);
-    
+function cellClick(e){    
     // Reveal number
     // left click
     if(e.button === 0){
         if(e.target.classList.contains('bomb')){
-            document.getElementsByClassName('overlayBox')[0].style.display = 'block';
-            console.log('BOMB!');
+            lost();
             return;
         }
         // click on text
@@ -141,7 +155,7 @@ function cellClick(e){
 
             // For empty cells
             if(e.target.children[0].innerText === ''){
-                console.log('empty cell');
+                // console.log('empty cell');
                 revealEmptyCells(e.target);
 
             }
@@ -173,17 +187,11 @@ function cellClick(e){
         }
     }      
     if(isSolved()){
-        console.log("solved");
-    }
-    else{
-        console.log("not solved");
+        won();
     }
 
 }
-
-let table = document.getElementById("websweeper");
     
-
 function revealEmptyCells(cell){
     cell.classList.add('revealed');
     // cell.style.backgroundColor = 'azure';
@@ -228,6 +236,31 @@ function isSolved(){
     return true;
 }
 
+function start(){
+    console.log("Game started!");
+    document.getElementById("mainMenuBox").style.display = "none";
+    document.getElementById("overlayBox").style.display = "none";
+
+}
+
+function lost(){
+    console.log("You lost!");
+    document.getElementById("overlayBox").style.display = "block";
+    document.getElementById("lostMenuBox").style.display = "block";
+}
+
+function retry(){
+    window.location.reload();
+    // TODO: reset table
+}
+
+function won(){
+    console.log("You won!");
+    document.getElementById("overlayBox").style.display = "block";
+    document.getElementById("wonMenuBox").style.display = "block";
+}
+
+let table = document.getElementById("websweeper");
 
 window.onload = () => {
     initTable(size);
