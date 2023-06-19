@@ -1,11 +1,16 @@
-const nBombs_easy = 10;
-const nBombs_medium = 15;
-const nBombs_hard = 20;
-const size = 10;
+const nBombs = 12;
+const TABLE_SIZE = 800;
 
-function initTable() {
+const size_easy = 15;
+const size_medium = 20;
+const size_hard = 25;
+
+function initTable(SIZE) {
+      // Clear table if it exists already - used for regenerating
       const table = document.getElementById('websweeper');
-      // TODO: overlay is not the right word
+      if (table.children) {
+            table.innerHTML = '';
+      }
       // Overlay - the transparent background behind boxes
       const overlay = document.createElement('div');
       overlay.setAttribute('id', 'overlayBox');
@@ -26,10 +31,6 @@ function initTable() {
       const optionsSelect = document.createElement('select');
       optionsSelect.setAttribute('id', 'difficultySelect');
       let lastDifficulty = localStorage.getItem('difficulty');
-      console.log(lastDifficulty);
-      if (!localStorage) {
-            lastDifficulty = localStorage.setItem('difficulty', 'easy');
-      }
       // Remember what was last selected
       optionsSelect.addEventListener('change', (e) => {
             const diff = e.target.value;
@@ -110,27 +111,28 @@ function initTable() {
                   e.preventDefault();
             }
       });
-      const difficulty = document.getElementById('difficultySelect').value;
-      let nBombs = 0;
-      if (difficulty === 'easy') {
-            nBombs = nBombs_easy;
-      } else if (difficulty === 'medium') {
-            nBombs = nBombs_medium;
-      } else if (difficulty === 'hard') {
-            nBombs = nBombs_hard;
-      }
-      genereateBombs(nBombs);
+      genereateTable(SIZE);
 }
 
-function genereateBombs(nBombs) {
+function genereateTable(SIZE) {
       const table = document.getElementById('websweeper');
+      const CELL_SIZE = Math.floor(TABLE_SIZE / SIZE);
+      console.log(
+            'Generating table with the size of:',
+            SIZE,
+            'so the cell size will be:',
+            CELL_SIZE
+      );
+      console.log(CELL_SIZE);
       if (websweeper) {
             const createdTable = document.createElement('table');
-            for (let i = 0; i < size; i++) {
+            for (let i = 0; i < SIZE; i++) {
                   const createdRow = document.createElement('tr');
-                  for (let j = 0; j < size; j++) {
+                  for (let j = 0; j < SIZE; j++) {
                         const createdCell = document.createElement('td');
                         createdCell.classList += 'r' + i + ' c' + j;
+                        createdCell.style.width = CELL_SIZE + 'px';
+                        createdCell.style.height = CELL_SIZE + 'px';
                         // Generate bombs
                         if (Math.random() * 100 > 100 - nBombs) {
                               createdCell.innerText = '';
@@ -147,18 +149,18 @@ function genereateBombs(nBombs) {
                   createdTable.appendChild(createdRow);
             }
             table.appendChild(createdTable);
-            fillNumbers();
+            fillNumbers(SIZE);
       }
 }
 
-function fillNumbers() {
+function fillNumbers(SIZE) {
       const table = document.getElementById('websweeper');
       if (!table) {
             console.log("Couldn't fill numbers");
             return;
       }
-      for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
+      for (let i = 0; i < SIZE; i++) {
+            for (let j = 0; j < SIZE; j++) {
                   // console.log("caut:", 'r'+i+" c"+j);
                   const cell = document.getElementsByClassName(
                         'r' + i + ' c' + j
@@ -175,9 +177,9 @@ function fillNumbers() {
                               //console.log("caut", "r"+i_fin+" c"+j_fin);
                               if (
                                     i_fin < 0 ||
-                                    i_fin >= size ||
+                                    i_fin >= SIZE ||
                                     j_fin < 0 ||
-                                    j_fin >= size
+                                    j_fin >= SIZE
                               ) {
                                     continue;
                               }
@@ -189,12 +191,13 @@ function fillNumbers() {
                               }
                         }
                   }
-                  insertNumber(cell[0], bombsNearby);
+                  const difficulty = localStorage.getItem('difficulty');
+                  insertNumber(cell[0], bombsNearby, difficulty);
             }
       }
 }
 
-function insertNumber(cell, number) {
+function insertNumber(cell, number, difficulty) {
       colors = [
             '#009ce9',
             '#66ff00',
@@ -210,6 +213,13 @@ function insertNumber(cell, number) {
             cell.classList.add('number');
       }
       numberInside.classList.add('formated');
+      if (difficulty === 'easy') {
+            cell.style.fontSize = '40px';
+      } else if (difficulty === 'medium') {
+            cell.style.fontSize = '30px';
+      } else if (difficulty === 'hard') {
+            cell.style.fontSize = '20px';
+      }
       numberInside.style.color = colors[number - 1];
       // numberInside.removeEventListener('click', cellClick);
       cell.appendChild(numberInside);
@@ -268,15 +278,16 @@ function cellClick(e) {
 
 function revealEmptyCells(cell) {
       cell.classList.add('revealed');
-      // cell.style.backgroundColor = 'azure';
       if (cell.classList.contains('number')) {
             cell.children[0].style.opacity = '1';
             return;
       }
       console.log(cell);
-      // console.log(cell.classList);
-      let i = cell.classList[0][1] - 0;
-      let j = cell.classList[1][1] - 0;
+      console.log(cell.classList);
+      let i = cell.classList[0].substring(1) - 0;
+      let j = cell.classList[1].substring(1) - 0;
+      console.log('I, J:', i, j);
+      console.log(i, j);
       console.log(i, j);
       for (let i2 = -1; i2 < 2; i2++) {
             for (let j2 = -1; j2 < 2; j2++) {
@@ -284,9 +295,9 @@ function revealEmptyCells(cell) {
                   let j_fin = j + j2;
                   if (
                         i_fin < 0 ||
-                        i_fin >= size ||
+                        i_fin >= SIZE ||
                         j_fin < 0 ||
-                        j_fin >= size
+                        j_fin >= SIZE
                   ) {
                         continue;
                   }
@@ -303,8 +314,8 @@ function revealEmptyCells(cell) {
 }
 
 function isSolved() {
-      for (let i = 0; i < size; i++) {
-            for (let j = 0; j < size; j++) {
+      for (let i = 0; i < SIZE; i++) {
+            for (let j = 0; j < SIZE; j++) {
                   const cell = document.getElementsByClassName(
                         'r' + i + ' c' + j
                   );
@@ -323,6 +334,19 @@ function isSolved() {
 function start(e) {
       e.preventDefault();
       console.log('Game started!');
+
+      console.log('DAT MENIU JOS! MERS?');
+      const difficulty = document.getElementById('difficultySelect').value;
+      console.log(difficulty);
+      if (difficulty === 'easy') {
+            SIZE = size_easy;
+      } else if (difficulty === 'medium') {
+            SIZE = size_medium;
+      } else if (difficulty === 'hard') {
+            SIZE = size_hard;
+      }
+      initTable(SIZE);
+
       document.getElementById('mainMenuBox').style.display = 'none';
       document.getElementById('overlayBox').style.display = 'none';
 }
@@ -346,7 +370,13 @@ function won() {
 let table = document.getElementById('websweeper');
 
 window.onload = () => {
-      initTable(size);
+      // Getting the last selected dificulty
+      if (!localStorage.getItem('difficulty')) {
+            localStorage.setItem('difficulty', 'easy');
+      }
+      initTable();
+      console.log('AM IESIT DIN INIT');
+
       // TODO: TIME UPDATE
       //      - Timer
       //      - Best score

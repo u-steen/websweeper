@@ -1,7 +1,9 @@
+:root {
+      --websweeperSize: 800px;
+}
+
 #websweeper > table td {
       background-color: #342e44;
-      width: 70px;
-      height: 70px;
       border: 1px black solid;
       margin: 0px;
       padding: 0px;
@@ -11,13 +13,16 @@
 }
 
 #websweeper > table {
+      box-sizing: border-box;
       border-spacing: 0px 0;
       border: 7px solid black;
       position: relative;
+      width: var(--websweeperSize);
+      overflow: hidden;
 }
 
 .formated {
-      font-size: 40px;
+      /* font-size: 25px; */
       margin: 0px;
       padding: 0px;
       font-weight: 800;
@@ -47,8 +52,8 @@
       justify-content: center;
 }
 #overlayBox {
-      height: 714px;
-      width: 714px;
+      height: var(--websweeperSize);
+      width: var(--websweeperSize);
       background-color: rgba(57, 52, 61, 0.507);
       position: absolute;
       z-index: 1;
