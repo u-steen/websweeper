@@ -1,13 +1,15 @@
-const nBombs = 12;
+const nBombs_easy = 10;
+const nbombs_medium = 15;
+const nbombs_hard = 20;
 const TABLE_SIZE = 800;
 
 const size_easy = 10;
-const size_medium = 20;
+const size_medium = 15;
 const size_hard = 25;
 
-let timerInterval;
+let timerInterval, SIZE, NBOMBS;
 
-function initTable(SIZE) {
+function initTable(SIZE, NBOMBS) {
       // Clear table if it exists already - used for regenerating
       const table = document.getElementById('websweeper');
       if (table.children) {
@@ -122,10 +124,10 @@ function initTable(SIZE) {
                   e.preventDefault();
             }
       });
-      genereateTable(SIZE);
+      genereateTable(SIZE, NBOMBS);
 }
 
-function genereateTable(SIZE) {
+function genereateTable(SIZE, NBOMBS) {
       const table = document.getElementById('websweeper');
       const CELL_SIZE = Math.floor(TABLE_SIZE / SIZE);
       if (websweeper) {
@@ -138,7 +140,7 @@ function genereateTable(SIZE) {
                         createdCell.style.width = CELL_SIZE + 'px';
                         createdCell.style.height = CELL_SIZE + 'px';
                         // Generate bombs
-                        if (Math.random() * 100 > 100 - nBombs) {
+                        if (Math.random() * 100 > 100 - NBOMBS) {
                               createdCell.innerText = '';
                               createdCell.style.color = 'white';
                               createdCell.classList += ' bomb';
@@ -165,7 +167,6 @@ function fillNumbers(SIZE) {
       }
       for (let i = 0; i < SIZE; i++) {
             for (let j = 0; j < SIZE; j++) {
-                  // console.log("caut:", 'r'+i+" c"+j);
                   const cell = document.getElementsByClassName(
                         'r' + i + ' c' + j
                   );
@@ -178,7 +179,6 @@ function fillNumbers(SIZE) {
                         for (let j2 = -1; j2 < 2; j2++) {
                               let i_fin = i + i2;
                               let j_fin = j + j2;
-                              //console.log("caut", "r"+i_fin+" c"+j_fin);
                               if (
                                     i_fin < 0 ||
                                     i_fin >= SIZE ||
@@ -248,7 +248,6 @@ function cellClick(e) {
 
                   // For empty cells
                   if (e.target.children[0].innerText === '') {
-                        // console.log('empty cell');
                         revealEmptyCells(e.target);
                   }
                   e.target.children[0].style.opacity = '1';
@@ -286,13 +285,8 @@ function revealEmptyCells(cell) {
             cell.children[0].style.opacity = '1';
             return;
       }
-      console.log(cell);
-      console.log(cell.classList);
       let i = cell.classList[0].substring(1) - 0;
       let j = cell.classList[1].substring(1) - 0;
-      console.log('I, J:', i, j);
-      console.log(i, j);
-      console.log(i, j);
       for (let i2 = -1; i2 < 2; i2++) {
             for (let j2 = -1; j2 < 2; j2++) {
                   let i_fin = i + i2;
@@ -309,8 +303,6 @@ function revealEmptyCells(cell) {
                         'r' + i_fin + ' c' + j_fin
                   );
                   if (!nearbyCell[0].classList.contains('revealed')) {
-                        // console.log("empty nearby:", "r"+i_fin+" c"+j_fin);
-                        // console.log(nearbyCell[0]);
                         revealEmptyCells(nearbyCell[0]);
                   }
             }
@@ -328,7 +320,6 @@ function isSolved() {
                               cell[0].classList.contains('flagged')) ||
                         cell[0].classList.contains('revealed')
                   ) {
-                        console.log('casuta', i, j, 'casuta rezolvata');
                   } else return false;
             }
       }
@@ -337,29 +328,29 @@ function isSolved() {
 
 function start(e) {
       e.preventDefault();
-      console.log('Game started!');
       // Starting timer
       timerReset();
       timerStart();
 
-      console.log('DAT MENIU JOS! MERS?');
       const difficulty = document.getElementById('difficultySelect').value;
-      console.log(difficulty);
       if (difficulty === 'easy') {
             SIZE = size_easy;
+            NBOMBS = nBombs_easy;
       } else if (difficulty === 'medium') {
             SIZE = size_medium;
+            NBOMBS = nbombs_medium;
       } else if (difficulty === 'hard') {
             SIZE = size_hard;
+            NBOMBS = nbombs_hard;
       }
-      initTable(SIZE);
+      initTable(SIZE, NBOMBS);
 
       document.getElementById('mainMenuBox').style.display = 'none';
       document.getElementById('overlayBox').style.display = 'none';
 }
 
 function lost() {
-      console.log('You lost!');
+      stopTimer(timerInterval);
       document.getElementById('overlayBox').style.display = 'block';
       document.getElementById('lostMenuBox').style.display = 'block';
 }
@@ -369,13 +360,11 @@ function retry() {
 }
 
 function won() {
-      console.log('You won!');
       stopTimer(timerInterval);
       displayedTimer = document.getElementById('displayedTimer');
-      displayedTimer.innerText = getTimer();
+      displayedTimer.innerText = 'Solved in ' + getTimer();
       document.getElementById('overlayBox').style.display = 'block';
       document.getElementById('wonMenuBox').style.display = 'block';
-      console.log(getTimer());
 }
 
 let table = document.getElementById('websweeper');
@@ -413,7 +402,6 @@ function timerStart() {
             increaseTimer(1);
             // We have to select it every timer in order to update
             const timer = document.getElementById('timerCounter');
-            console.log('[DEBUG] ', getTimer());
             timer.innerText = getTimer();
       }, 1000);
 }
