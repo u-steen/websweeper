@@ -1,9 +1,11 @@
 const nBombs = 12;
 const TABLE_SIZE = 800;
 
-const size_easy = 15;
+const size_easy = 10;
 const size_medium = 20;
 const size_hard = 25;
+
+let timerInterval;
 
 function initTable(SIZE) {
       // Clear table if it exists already - used for regenerating
@@ -11,6 +13,10 @@ function initTable(SIZE) {
       if (table.children) {
             table.innerHTML = '';
       }
+      const timer = document.createElement('h3');
+      timer.setAttribute('id', 'timerCounter');
+      timer.innerText = 'Do not click the bombs! Good Luck!';
+      table.appendChild(timer);
       // Overlay - the transparent background behind boxes
       const overlay = document.createElement('div');
       overlay.setAttribute('id', 'overlayBox');
@@ -96,8 +102,12 @@ function initTable(SIZE) {
       overlay.appendChild(wonMenuBox);
 
       const titleWonBox = document.createElement('h2');
-      titleWonBox.innerText = 'You Won! Thank you for playing!';
+      titleWonBox.innerText = 'You Won!';
       wonMenuBox.appendChild(titleWonBox);
+
+      let titleWonTimer = document.createElement('h3');
+      titleWonTimer.setAttribute('id', 'displayedTimer');
+      wonMenuBox.appendChild(titleWonTimer);
 
       const wonRetryBtn = document.createElement('button');
       wonRetryBtn.setAttribute('id', 'retryBtn');
@@ -105,7 +115,8 @@ function initTable(SIZE) {
       wonRetryBtn.addEventListener('click', retry);
       wonMenuBox.appendChild(wonRetryBtn);
 
-      // ? De ce merge asa cv???
+      // ? De ce merge asa cv ??
+      // ![BUG] nu merge sa apas click dreapta nicaieri inainte sa dau start
       document.addEventListener('contextmenu', (e) => {
             if (e.target.id !== 'websweeper') {
                   e.preventDefault();
@@ -117,13 +128,6 @@ function initTable(SIZE) {
 function genereateTable(SIZE) {
       const table = document.getElementById('websweeper');
       const CELL_SIZE = Math.floor(TABLE_SIZE / SIZE);
-      console.log(
-            'Generating table with the size of:',
-            SIZE,
-            'so the cell size will be:',
-            CELL_SIZE
-      );
-      console.log(CELL_SIZE);
       if (websweeper) {
             const createdTable = document.createElement('table');
             for (let i = 0; i < SIZE; i++) {
@@ -334,6 +338,9 @@ function isSolved() {
 function start(e) {
       e.preventDefault();
       console.log('Game started!');
+      // Starting timer
+      timerReset();
+      timerStart();
 
       console.log('DAT MENIU JOS! MERS?');
       const difficulty = document.getElementById('difficultySelect').value;
@@ -363,19 +370,73 @@ function retry() {
 
 function won() {
       console.log('You won!');
+      stopTimer(timerInterval);
+      displayedTimer = document.getElementById('displayedTimer');
+      displayedTimer.innerText = getTimer();
       document.getElementById('overlayBox').style.display = 'block';
       document.getElementById('wonMenuBox').style.display = 'block';
+      console.log(getTimer());
 }
 
 let table = document.getElementById('websweeper');
+
+// Timer
+
+let mins = 0,
+      secs = 0,
+      timerStartedFlag = false;
+
+function timerReset() {
+      mins = 0;
+      secs = 0;
+      timerStartedFlag = false;
+}
+
+function getTimer() {
+      return (
+            mins.toLocaleString('en-US', {
+                  minimumIntegerDigits: 2,
+                  useGrouping: false,
+            }) +
+            ':' +
+            secs.toLocaleString('en-US', {
+                  minimumIntegerDigits: 2,
+                  useGrouping: false,
+            })
+      );
+}
+
+function timerStart() {
+      // TODO: add live timer
+      // The timer above the board
+      timerInterval = setInterval(() => {
+            increaseTimer(1);
+            // We have to select it every timer in order to update
+            const timer = document.getElementById('timerCounter');
+            console.log('[DEBUG] ', getTimer());
+            timer.innerText = getTimer();
+      }, 1000);
+}
+
+function stopTimer(timer) {
+      clearInterval(timer);
+}
+
+function increaseTimer(amount) {
+      if (secs + amount < 60) {
+            secs++;
+      } else {
+            mins++;
+            secs = 0;
+      }
+}
 
 window.onload = () => {
       // Getting the last selected dificulty
       if (!localStorage.getItem('difficulty')) {
             localStorage.setItem('difficulty', 'easy');
       }
-      initTable();
-      console.log('AM IESIT DIN INIT');
+      initTable(10);
 
       // TODO: TIME UPDATE
       //      - Timer
