@@ -1,7 +1,22 @@
+:root {
+      background-color: #3e3d4f;
+      color: whitesmoke;
+      font-family: Tahoma;
+}
 #websweeper {
       --websweeperSize: 800px;
-      /* ![BUG] Nu merge fontul pe butoane */
-      font-family: Tahoma;
+      background-color: #878199;
+      padding-left: 20%;
+      padding-bottom: 20px;
+}
+
+#websweeper > table {
+      box-sizing: border-box;
+      border-spacing: 0px 0;
+      border: 7px solid black;
+      position: relative;
+      width: var(--websweeperSize);
+      overflow: hidden;
 }
 
 #websweeper > table td {
@@ -14,17 +29,7 @@
       text-align: center;
 }
 
-#websweeper > table {
-      box-sizing: border-box;
-      border-spacing: 0px 0;
-      border: 7px solid black;
-      position: relative;
-      width: var(--websweeperSize);
-      overflow: hidden;
-}
-
 .formated {
-      /* font-size: 25px; */
       margin: 0px;
       padding: 0px;
       font-weight: 800;
@@ -65,7 +70,7 @@
       background-color: rgb(233, 88, 69);
       position: absolute;
       top: 150px;
-      left: 115px;
+      left: 150px;
       text-align: center;
 }
 
@@ -75,17 +80,17 @@
       background-color: rgb(26, 175, 155);
       position: absolute;
       top: 150px;
-      left: 115px;
+      left: 150px;
       text-align: center;
 }
 
 #mainMenuBox {
       height: 400px;
       width: 500px;
-      background-color: rgb(122, 167, 96);
+      background-color: rgb(107, 97, 129);
       position: absolute;
       top: 150px;
-      left: 115px;
+      left: 150px;
       text-align: center;
 }
 

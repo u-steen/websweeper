@@ -117,8 +117,6 @@ function initTable(SIZE, NBOMBS) {
       wonRetryBtn.addEventListener('click', retry);
       wonMenuBox.appendChild(wonRetryBtn);
 
-      // ? De ce merge asa cv ??
-      // ![BUG] nu merge sa apas click dreapta nicaieri inainte sa dau start
       document.addEventListener('contextmenu', (e) => {
             if (e.target.id !== 'websweeper') {
                   e.preventDefault();
@@ -396,7 +394,6 @@ function getTimer() {
 }
 
 function timerStart() {
-      // TODO: add live timer
       // The timer above the board
       timerInterval = setInterval(() => {
             increaseTimer(1);
@@ -425,9 +422,4 @@ window.onload = () => {
             localStorage.setItem('difficulty', 'easy');
       }
       initTable(10);
-
-      // TODO: TIME UPDATE
-      //      - Timer
-      //      - Best score
-      //      - Bug fixes (diffrent fonts on different computer, bomb nr)
 };
