@@ -1,5 +1,7 @@
 # WEBSWEEPER
 
+The game is hosted on Github Pages and you can play it here: https://u-steen.github.io/websweeper/
+
 This is a Minesweeper game created to run in browser. When you get into the game, you can select the difficulty.
 
 In minesweeper you have to click all the cells, avoiding the cells with bombs. When you click a cell one of 3 things can happen.
